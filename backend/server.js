@@ -75,6 +75,9 @@ io.on("connection", (socket) => {
         console.log("A logged in user joined room: " + room);
     })
 
+    socket.on("typing", (room) => socket.in(room).emit("typing"));
+    socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
     socket.on("new message", (newMessageReceived) => {
         // check which chat the newmessage belongs to
         let chat = newMessageReceived.chat;
@@ -88,4 +91,11 @@ io.on("connection", (socket) => {
             socket.in(user._id).emit("message received", newMessageReceived);
         })
     })
+
+    // disconnect socket
+    socket.off("setup", () => {
+        console.log("USER DISCONNECTED");
+        socket.leave(userObj._id);
+    });
+    
 });

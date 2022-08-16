@@ -27,6 +27,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 	const [newMessage, setNewMessage] = useState();
 	const [loading, setLoading] = useState(false);
 	const [socketConnected, setSocketConnected] = useState(false)
+	const [isTyping, setIsTyping] = useState(false);
+	const [typing, setTyping] = useState(false);
 
 	const { user, selectedChat, setSelectedChat } = ChatState();
 
@@ -66,7 +68,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 	useEffect(() => {
 		socket = io(ENDPOINT);
 		socket.emit("setup", user);
-		socket.on("connection", () => setSocketConnected(true));
+		socket.on("connected", () => setSocketConnected(true));
+		socket.on('typing', () => setIsTyping(true))
+		socket.on('stop typing', () => setIsTyping(false));
 	}, []);
 
 	useEffect(() => {
@@ -89,6 +93,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
 	const sendMessage = async (e) => {
 		if (e.key === "Enter" && newMessage) {
+			socket.emit("stop typing", selectedChat._id);
 			try {
 				const config = {
 					headers: {
@@ -127,6 +132,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
 	const typingHandler = (e) => {
 		setNewMessage(e.target.value);
+
+		//typing indicator logic
+		if (!socketConnected) return;
+
+		if (!typing) {
+			setTyping(true);
+			socket.emit("typing", selectedChat._id);
+		}
+
+		// when to stop typing
+		let lastTypingTime = new Date().getTime();
+		let timerLength = 3000;
+		
+		setTimeout(() => {
+			let timeNow = new Date().getTime();
+			let timeDiff = timeNow - lastTypingTime;
+
+			if (timeDiff >= timerLength && typing) {
+				socket.emit("stop typing", selectedChat._id);
+				setTyping(false);
+			}
+		}, timerLength);
 	};
 
 	return (
@@ -192,6 +219,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 							</div>
 						)}
 						<FormControl onKeyDown={sendMessage} isRequired mt={3}>
+							{isTyping && <div style={{marginBottom:"2px", color:"grayText", fontFamily:"Work sans"}} >Typing...</div>}
 							<Input
 								variant="filled" // try hovering the mouse on the input field. try variant="outline"
 								bg="#E0E0E0"
