@@ -23,14 +23,14 @@ const ENDPOINT = "http://localhost:8000"; // server uses port 8000
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-	const [messages, setMessages]  = useState();
-	const [newMessage, setNewMessage] = useState();
+	const [messages, setMessages]  = useState([]);
+	const [newMessage, setNewMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [socketConnected, setSocketConnected] = useState(false)
 	const [isTyping, setIsTyping] = useState(false);
 	const [typing, setTyping] = useState(false);
 
-	const { user, selectedChat, setSelectedChat } = ChatState();
+	const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
 
 	const toast = useToast();
 
@@ -80,11 +80,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 		// emit the message or send the notification to the user
 	}, [selectedChat]); // fetch messages when the chat changes
 
+
 	useEffect(() => {
 		socket.on("message received", (newMessageReceived) => {
 			if (!selectedChatCompare || // if no chat is selected
-				selectedChatCompare._id !== newMessageReceived.chat._id) {
-				//give notification
+				selectedChatCompare._id !== newMessageReceived.chat._id) // or if the current selected chat is not the chat that's receving new message
+			{
+				// then show notification
+				if (!notification.includes(newMessageReceived)) {
+					setNotification([newMessageReceived, ...notification]);
+					setFetchAgain(!fetchAgain);
+				}
 			} else {
 				setMessages([...messages, newMessageReceived]);
 			}
