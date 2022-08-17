@@ -20,8 +20,6 @@ connectDB(); // needs to be under dotenv.config()
 //     origin: "http://localhost:3000"
 // }))
 
-
-
 // app.get('/api/chat', (req, res) => {
 //     res.send(chats);
 // })
@@ -39,22 +37,31 @@ app.use("/api/message", messageRoutes); // home route for messages
 
 //------------DEPLOYMENT---------------
 
-const __dirname1 = path.resolve();
-if (process.env.NODE_ENV === 'production') {
-    // establishing the path from the current working directory to the build folder of our frontend
-    app.use(express.static(path.join(__dirname1, '/frontend/build'))); 
-    // go to frontend folder and run npm run build
-
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html")) // run the index.html file inside the build folder, which contains the minimized code for our app
+const __dirname1 = path.resolve(); // shows the project root folder
+console.log(__dirname1);
+if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
+    app.use(express.static("frontend/build"));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname1 + "/frontend/build/index.html"));
     });
+}
+// if (process.env.NODE_ENV === 'production') {
+//     // establishing the path from the current working directory to the build folder of our frontend
+//     app.use(express.static(path.join(__dirname1, '/frontend/build'))); 
+//     // go to frontend folder and run npm run build
 
-    /**After that, should be able to see the frontend by running in the backend
-     * go to the backend/root folder
-     * run node backend/server.js (not nodemon)
-     * on browser, go to localhost:8000
-     */
-} else {
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html")) // run the index.html file inside the build folder, which contains the minimized code for our app
+//     });
+
+//     /**After that, should be able to see the frontend by running in the backend
+//      * go to the backend/root folder
+//      * run node backend/server.js (not nodemon)
+//      * on browser, go to localhost:8000
+//      */
+// }
+
+else {
     app.get("/", (req, res) => {
         res.send("api is running successfully");
     });
