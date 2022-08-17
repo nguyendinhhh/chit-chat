@@ -10,6 +10,7 @@ const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const path = require('path');
 
 dotenv.config();
 connectDB(); // needs to be under dotenv.config()
@@ -19,9 +20,7 @@ connectDB(); // needs to be under dotenv.config()
 //     origin: "http://localhost:3000"
 // }))
 
-app.get("/", (req, res) => {
-	res.send("api is running successfully");
-});
+
 
 // app.get('/api/chat', (req, res) => {
 //     res.send(chats);
@@ -36,6 +35,33 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoutes); // home route for user
 app.use("/api/chat", chatRoutes); //home route for chat
 app.use("/api/message", messageRoutes); // home route for messages
+
+
+//------------DEPLOYMENT---------------
+
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === 'production') {
+    // establishing the path from the current working directory to the build folder of our frontend
+    app.use(express.static(path.join(__dirname1, '/frontend/build'))); 
+    // go to frontend folder and run npm run build
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html")) // run the index.html file inside the build folder, which contains the minimized code for our app
+    });
+
+    /**After that, should be able to see the frontend by running in the backend
+     * go to the backend/root folder
+     * run node backend/server.js (not nodemon)
+     * on browser, go to localhost:8000
+     */
+} else {
+    app.get("/", (req, res) => {
+        res.send("api is running successfully");
+    });
+}
+
+//------------DEPLOYMENT---------------
+
 
 app.use(notFound);
 app.use(errorHandler);
