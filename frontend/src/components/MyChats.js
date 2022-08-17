@@ -8,8 +8,8 @@ import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 
 const MyChat = ({ fetchAgain }) => {
-	const [loggedUser, setLoggedUser] = useState();
-	const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
+	// const [loggedUser, setLoggedUser] = useState();
+	const { user, selectedChat, setSelectedChat, chats, setChats, initialLoading } = ChatState();
 
 	const toast = useToast();
 
@@ -24,6 +24,7 @@ const MyChat = ({ fetchAgain }) => {
 			const { data } = await axios.get("/api/chat", config);
 			// console.log(data);
 			setChats(data);
+			
 		} catch (error) {
 			toast({
 				title: "Error Occurred!",
@@ -37,7 +38,8 @@ const MyChat = ({ fetchAgain }) => {
 	};
 
 	useEffect(() => {
-		setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+		// setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+		// setLoggedUser(user);
 		fetchChats();
 	}, [fetchAgain]);
 
@@ -84,9 +86,11 @@ const MyChat = ({ fetchAgain }) => {
 				overflowY="hidden"
 			>
 				{chats ? (
+					// {initial}
 					<Stack
 						overflowY="scroll" // make it scrollable
 					>
+						{initialLoading && <ChatLoading />}
 						{chats.map((chat) => (
 							<Box
 								onClick={() => setSelectedChat(chat)}
@@ -100,8 +104,9 @@ const MyChat = ({ fetchAgain }) => {
 							>
 								<Text>
 									{!chat.isGroupChat
-										? getSender(loggedUser, chat.users)
+										? getSender(user, chat.users) // for some reasons, getSender(loggedUser, chat.users) shows a blank page after login
 										: chat.chatName}
+									{/* {!chat.isGroupChat ? chat.users.find((u)=>u._id !== loggedUser._id).name : chat.chatName} */}
 								</Text>
 							</Box>
 						))}

@@ -42,7 +42,7 @@ const Homepage = () => {
 					color="black"
 					align="center"
 				>
-					Chit chat hehe
+					chit-chat
 				</Text>
 			</Box>
 			<Box bg={"white"} w="100%" p={4} borderRadius="lg" borderWidth="1px">

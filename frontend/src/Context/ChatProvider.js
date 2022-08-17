@@ -9,6 +9,7 @@ const ChatProvider = ({ children }) => {
     const [chats, setChats] = useState([]);
     // global state for notification
     const [notification, setNotification] = useState([]);
+    const [initialLoading, setInitialLoading] = useState(false);
 
     const history = useHistory();
     useEffect(() => {
@@ -21,7 +22,7 @@ const ChatProvider = ({ children }) => {
     }, [history]);
     
 
-    return <ChatContext.Provider value={{user,setUser,selectedChat,setSelectedChat, chats, setChats,notification,setNotification}}>{children}</ChatContext.Provider>;
+    return <ChatContext.Provider value={{user,setUser,selectedChat,setSelectedChat, chats, setChats,notification,setNotification, initialLoading, setInitialLoading }}>{children}</ChatContext.Provider>;
 };
 
 export const ChatState = () => {

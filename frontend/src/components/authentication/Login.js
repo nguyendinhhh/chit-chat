@@ -11,7 +11,8 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
+import { ChatState } from "../../Context/ChatProvider";
+	
 const Login = () => {
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
@@ -21,7 +22,9 @@ const Login = () => {
 	const handleClick = () => setShow(!show);
 	const toast = useToast();
 	const history = useHistory();
-	const submitHandler = async () => {
+	const { setUser, setInitialLoading } = ChatState();
+	const submitHandler = async (e) => {
+		
 		setLoading(true);
 		if (!email || !password) {
 			toast({
@@ -36,6 +39,7 @@ const Login = () => {
 		}
 
 		try {
+			// localStorage.setItem("userInfo", JSON.stringify(dummyUser));
 			const config = {
 				headers: {
 					"Content-type": "application/json",
@@ -53,9 +57,14 @@ const Login = () => {
 				isClosable: true,
 				position: "bottom",
 			});
-			localStorage.setItem("userInfo", JSON.stringify(data)); // for context api. Check ChatProvider.j=4=-q
+			setInitialLoading(true);
+			setUser(data);
+			localStorage.setItem("userInfo", JSON.stringify(data)); // for context api. Check ChatProvider.js
 			setLoading(false);
 			history.push("/chats");
+			setTimeout(() => {
+				setInitialLoading(false);
+			}, 2000);
 		} catch (error) {
 			console.log(error);
 			toast({
@@ -105,7 +114,7 @@ const Login = () => {
 			>
 				Login
 			</Button>
-			<Button
+			{/* <Button
 				variant="solid"
 				colorScheme={"gray"}
 				width="100%"
@@ -116,7 +125,7 @@ const Login = () => {
 				}}
 			>
 				Get Guest User Credentials
-			</Button>
+			</Button> */}
 		</VStack>
 	);
 };

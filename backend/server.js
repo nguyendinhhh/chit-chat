@@ -54,7 +54,7 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
-    console.log("Connected to socket.io");
+    // console.log("Connected to socket.io");
 
     // logged in user should be connected to his/her own personal socket
     // https://socket.io/docs/v4/server-initialization/
@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
         // create a new room with the id of the userobject
         // room is exclusive to that user only
         socket.join(userObj._id);
-        console.log(userObj._id);
+        // console.log(userObj._id);
         socket.emit("connected");
     });
 

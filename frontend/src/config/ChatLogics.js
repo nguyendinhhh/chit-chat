@@ -17,29 +17,34 @@ export const isSameSender = (messages, currentMessage, index, userId) => {
 	);
 };
 
-// check if its the last message of the opposed user 
+// check if its the last message of the opposed user
 export const isLastMessage = (messages, index, userId) => {
 	return (
 		index === messages.length - 1 &&
 		messages[messages.length - 1].sender._id !== userId &&
-        messages[messages.length - 1].sender._id
+		messages[messages.length - 1].sender._id
 	);
 };
 
 export const isSameSenderMargin = (messages, currentMessage, index, userId) => {
-    if (index < messages.length - 1 &&
-        messages[index + 1].sender._id === currentMessage.sender._id &&
-        messages[index].sender._id !== userId
-    ) return 33;
-    else if (
-        (index < messages.length - 1 &&
-            messages[index + 1].sender._id !== currentMessage.sender._id &&
-            messages[index].sender._id !== userId) ||
-        (index === messages.length - 1 && messages[index].sender._id !== userId)
-    ) return 0;
-    else return "auto";
-}
+	if (
+		index < messages.length - 1 &&
+		messages[index + 1].sender._id === currentMessage.sender._id &&
+		messages[index].sender._id !== userId
+	)
+		return 33;
+	else if (
+		(index < messages.length - 1 &&
+			messages[index + 1].sender._id !== currentMessage.sender._id &&
+			messages[index].sender._id !== userId) ||
+		(index === messages.length - 1 && messages[index].sender._id !== userId)
+	)
+		return 0;
+	else return "auto";
+};
 
-export const isSameUser = (messages,currentMessage,index) => {
-    return (index > 0 && messages[index - 1].sender._id === currentMessage.sender._id);
-}
+export const isSameUser = (messages, currentMessage, index) => {
+	return (
+		index > 0 && messages[index - 1].sender._id === currentMessage.sender._id
+	);
+};
