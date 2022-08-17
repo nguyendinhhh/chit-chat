@@ -56,6 +56,8 @@ const Homepage = () => {
 						<TabPanel><Signup /></TabPanel>
 					</TabPanels>
 				</Tabs>
+				<Text textAlign="center">The app is still in an ongoing development state. Please refresh the page after you signup and login so your main chat page can be shown. Thank you very much!</Text>
+				<Text mt={4} fontSize="small" textAlign="center">Created By Nguyen Dinh</Text>
 			</Box>
 		</Container>
 	);
