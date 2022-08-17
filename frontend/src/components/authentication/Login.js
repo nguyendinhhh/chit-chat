@@ -57,7 +57,7 @@ const Login = () => {
 				position: "bottom",
 			});
 			setInitialLoading(true);
-			setUser(data);
+			// setUser(data);
 			localStorage.setItem("userInfo", JSON.stringify(data)); // for context api. Check ChatProvider.js
 			setLoading(false);
 			history.push("/chats");
