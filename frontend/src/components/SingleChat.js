@@ -19,7 +19,8 @@ import ScrollableChat from "./ScrollableChat";
 import "./styles.css";
 
 import io from "socket.io-client";
-const ENDPOINT = "https://chitto-chatto.herokuapp.com/"; //was "http://localhost:8000"; // server uses port 8000
+const ENDPOINT = "https://chitto-chatto.herokuapp.com/";
+// const ENDPOINT = "http://localhost:8000"; // server uses port 8000
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {

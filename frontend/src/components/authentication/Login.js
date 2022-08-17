@@ -23,8 +23,8 @@ const Login = () => {
 	const toast = useToast();
 	const history = useHistory();
 	const { setUser, setInitialLoading } = ChatState();
+
 	const submitHandler = async (e) => {
-		
 		setLoading(true);
 		if (!email || !password) {
 			toast({
@@ -39,7 +39,6 @@ const Login = () => {
 		}
 
 		try {
-			// localStorage.setItem("userInfo", JSON.stringify(dummyUser));
 			const config = {
 				headers: {
 					"Content-type": "application/json",

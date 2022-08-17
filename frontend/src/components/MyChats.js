@@ -8,7 +8,7 @@ import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 
 const MyChat = ({ fetchAgain }) => {
-	// const [loggedUser, setLoggedUser] = useState();
+	const [loggedUser, setLoggedUser] = useState();
 	const { user, selectedChat, setSelectedChat, chats, setChats, initialLoading } = ChatState();
 
 	const toast = useToast();
@@ -38,8 +38,8 @@ const MyChat = ({ fetchAgain }) => {
 	};
 
 	useEffect(() => {
-		// setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
-		// setLoggedUser(user);
+		setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+		setLoggedUser(user);
 		fetchChats();
 	}, [fetchAgain]);
 
@@ -104,7 +104,7 @@ const MyChat = ({ fetchAgain }) => {
 							>
 								<Text>
 									{!chat.isGroupChat
-										? getSender(user, chat.users) // for some reasons, getSender(loggedUser, chat.users) shows a blank page after login
+										? getSender(loggedUser, chat.users) // for some reasons, getSender(loggedUser, chat.users) shows a blank page after login
 										: chat.chatName}
 									{/* {!chat.isGroupChat ? chat.users.find((u)=>u._id !== loggedUser._id).name : chat.chatName} */}
 								</Text>
